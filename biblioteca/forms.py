@@ -4,10 +4,7 @@ from .models import Model3D
 class Model3DForm(forms.ModelForm):
     class Meta:
         model = Model3D
-        fields = ['nombre', 'descripcion', 'url_archivo', 'categoria', 'nivel']
-
-class Model3DForm(forms.ModelForm):
-    class Meta:
-        model = Model3D
-        fields = ['nombre', 'descripcion', 'url_archivo', 'categoria', 'nivel']
-
+        fields = ['nombre', 'descripcion', 'url_archivo', 'categoria', 'etiquetas', 'nivel']
+        widgets = {
+            'etiquetas': forms.CheckboxSelectMultiple()
+        }
