@@ -9,8 +9,26 @@ def inicio(request):
 
 
 def lista_modelos(request):
+    categoria_id = request.GET.get('categoria')
+    termino = request.GET.get('q')
+
     modelos = Model3D.objects.all().select_related('categoria').prefetch_related('etiquetas')
-    return render(request, 'biblioteca/lista_modelos.html', {'modelos': modelos})
+
+    if categoria_id:
+        modelos = modelos.filter(categoria_id=categoria_id)
+
+    if termino:
+        modelos = modelos.filter(nombre__icontains=termino)
+
+    categorias = Category.objects.all()
+
+    context = {
+        'modelos': modelos,
+        'categorias': categorias,
+        'categoria_seleccionada': categoria_id,
+        'termino_busqueda': termino,
+    }
+    return render(request, 'biblioteca/lista_modelos.html', context)
 
 
 @login_required

@@ -3,57 +3,125 @@
 
 {% block contenido_principal %}
 <div class="container my-5">
+
+  <!-- TÍTULO -->
   <h2 class="section-title text-center mb-4">
     Biblioteca de modelos 3D
   </h2>
 
-  <div class="text-end mb-3">
+  <!-- BOTÓN AGREGAR -->
+  <div class="text-end mb-4">
     <a href="{% url 'agregar_modelo' %}" class="btn btn-primary">
       + Agregar nuevo modelo
     </a>
   </div>
 
+  <!-- FILTROS -->
+  <div class="row mb-4">
+    <div class="col-md-10 mx-auto">
+      <form method="get" class="row g-2 align-items-end">
+
+        <!-- FILTRO CATEGORÍA -->
+        <div class="col-md-5">
+          <label class="form-label">Categoría</label>
+          <select name="categoria" class="form-select">
+            <option value="">Todas las categorías</option>
+            {% for cat in categorias %}
+              <option value="{{ cat.id }}"
+                {% if categoria_seleccionada == cat.id|stringformat:"s" %}selected{% endif %}>
+                {{ cat.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- BUSCADOR -->
+        <div class="col-md-5">
+          <label class="form-label">Buscar</label>
+          <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Buscar por nombre..."
+            value="{{ termino_busqueda|default_if_none:'' }}"
+          >
+        </div>
+
+        <!-- BOTÓN FILTRAR -->
+        <div class="col-md-2 d-grid">
+          <button type="submit" class="btn btn-outline-primary">
+            Filtrar
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- LISTADO -->
   {% if modelos %}
     <div class="row g-4">
       {% for modelo in modelos %}
-      <div class="d-flex justify-content-between mt-3">
-  <a href="{{ modelo.url_archivo }}" target="_blank" class="btn btn-outline-primary btn-sm">
-    Ver archivo 3D
-  </a>
-  <div>
-    <a href="{% url 'editar_modelo' modelo.pk %}" class="btn btn-outline-secondary btn-sm">
-      Editar
-    </a>
-    <a href="{% url 'eliminar_modelo' modelo.pk %}" class="btn btn-outline-danger btn-sm">
-      Eliminar
-    </a>
-  </div>
-</div>
-
         <div class="col-md-4">
           <div class="card h-100 shadow-sm">
-            <div class="card-body">
+
+            <div class="card-body d-flex flex-column">
+
               <h5 class="card-title">{{ modelo.nombre }}</h5>
+
               <p class="card-text text-muted">
                 {{ modelo.descripcion|truncatewords:20 }}
               </p>
+
               <p class="mb-1">
                 <strong>Categoría:</strong> {{ modelo.categoria.nombre }}
               </p>
+
               <p class="mb-2">
                 <strong>Nivel:</strong> {{ modelo.nivel }}
               </p>
-              <a href="{{ modelo.url_archivo }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                Ver archivo 3D
-              </a>
+
+              <!-- ETIQUETAS -->
+              {% if modelo.etiquetas.all %}
+                <div class="mb-3">
+                  {% for etiqueta in modelo.etiquetas.all %}
+                    <span class="badge bg-secondary me-1">
+                      {{ etiqueta.nombre }}
+                    </span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <!-- ACCIONES -->
+              <div class="mt-auto d-flex justify-content-between">
+                <a href="{{ modelo.url_archivo }}" target="_blank"
+                   class="btn btn-outline-primary btn-sm">
+                  Ver archivo 3D
+                </a>
+
+                <div>
+                  <a href="{% url 'editar_modelo' modelo.pk %}"
+                     class="btn btn-outline-secondary btn-sm">
+                    Editar
+                  </a>
+                  <a href="{% url 'eliminar_modelo' modelo.pk %}"
+                     class="btn btn-outline-danger btn-sm">
+                    Eliminar
+                  </a>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
-  {% else %}
-    <p>No hay modelos registrados todavía.</p>
-  {% endif %}
-</div>
 
+  {% else %}
+    <p class="text-center mt-4">
+      No hay modelos registrados todavía.
+    </p>
+  {% endif %}
+
+</div>
 {% endblock %}

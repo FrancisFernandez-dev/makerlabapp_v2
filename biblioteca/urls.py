@@ -7,4 +7,6 @@ urlpatterns = [
     path('modelos/agregar/', views.agregar_modelo, name='agregar_modelo'),
     path('modelos/<int:pk>/editar/', views.editar_modelo, name='editar_modelo'),
     path('modelos/<int:pk>/eliminar/', views.eliminar_modelo, name='eliminar_modelo'),
+
+
 ]

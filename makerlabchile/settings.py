@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'biblioteca',
-    
 ]
 
 MIDDLEWARE = [
@@ -113,15 +112,26 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# ============================
+# Static files (CSS, JS, Images)
+# ============================
 
-STATIC_URL = 'static/'
+# ✅ CORRECTO PARA APP STATIC FILES
+STATIC_URL = '/static/'
+
+# ✅ BUENA PRÁCTICA (no rompe nada en desarrollo)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ============================
+# Authentication
+# ============================
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'lista_modelos'
